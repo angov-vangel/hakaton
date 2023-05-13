@@ -1,9 +1,21 @@
 "use client";
 import { useMemo, useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import {
+  Controller,
+  FieldValues,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Heading } from "./Heading";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+
+// CSS Modules, react-datepicker-cssmodules.css
+// import 'react-datepicker/dist/react-datepicker-cssmodules.css';
+
 enum STEPS {
   DESCRIPTION = 0,
   AGENDA = 1,
@@ -17,16 +29,17 @@ interface FormValues {
   event_type_id: string;
   academy_id: string;
   name: string;
-  date: string;
+  date: Date;
   event_info: string;
   client_info: string;
   agenda_day_one: string;
   agenda_day_two: string;
   max_participants: number;
-  aplication_deadline: string;
+  aplication_deadline: Date;
 }
 
 const CreateEvent = () => {
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const stepsArr = ["Description", "Agenda", "Teams", "Statistics", "Results"];
@@ -38,6 +51,7 @@ const CreateEvent = () => {
     handleSubmit,
     setValue,
     watch,
+    control,
     formState: { errors },
     reset,
   } = useForm<FormValues>({
@@ -46,19 +60,21 @@ const CreateEvent = () => {
       event_type_id: "",
       academy_id: "",
       name: "",
-      date: "",
+      date: new Date(),
       event_info: "",
       client_info: "",
       max_participants: 0,
       agenda_day_one: "",
       agenda_day_two: "",
-      aplication_deadline: "",
+      aplication_deadline: new Date(),
     },
   });
 
   // const category = watch("category");
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {};
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    console.log(data.date);
+  };
   //   if (step !== STEPS.PRICE) {
   //     return onNext();
   //   }
@@ -142,6 +158,10 @@ const CreateEvent = () => {
   if (step === STEPS.AGENDA) {
     bodyContent = (
       <div className="flex flex-col gap-8">
+        <DatePicker
+          selected={startDate}
+          onChange={(date) => setStartDate(date)}
+        />
         <div className="mt-5">
           <div className="mb-5">
             <button
@@ -182,8 +202,79 @@ const CreateEvent = () => {
   }
   if (step === STEPS.TEAMS) {
     bodyContent = (
-      <div className="flex flex-col gap-8">
-        <Heading title="Teams" />
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <tbody>
+            <tr className="bg-white border-b">
+              <th
+                scope="row"
+                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+              >
+                Submittion
+              </th>
+              <td className="px-6 py-4">
+                from{" "}
+                <Controller
+                  name="date"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                      selected={new Date(value)}
+                      onChange={onChange}
+                    />
+                  )}
+                />
+              </td>
+              <td className="px-6 py-4">
+                to{" "}
+                <Controller
+                  name="aplication_deadline"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                      selected={new Date(value)}
+                      onChange={onChange}
+                    />
+                  )}
+                />
+              </td>
+            </tr>
+            {/* <tr className="border-b bg-gray-50 ">
+              <th
+                scope="row"
+                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+              >
+                Event
+              </th>
+              <td className="px-6 py-4">
+                from{" "}
+                <Controller
+                  name="aplication_deadline"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                      selected={new Date(value)}
+                      onChange={onChange}
+                    />
+                  )}
+                />
+              </td>
+              <td className="px-6 py-4">
+                to{" "}
+                <Controller
+                  name="aplication_deadline"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                      selected={new Date(value)}
+                      onChange={onChange}
+                    />
+                  )}
+                />
+              </td>
+            </tr> */}
+          </tbody>
+        </table>
       </div>
     );
   }
