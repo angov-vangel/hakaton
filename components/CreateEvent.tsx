@@ -66,7 +66,9 @@ const CreateEvent = () => {
       max_participants: 0,
       agenda_day_one: "",
       agenda_day_two: "",
-      aplication_deadline: new Date(),
+      aplication_deadline: new Date(
+        new Date().getTime() + 24 * 60 * 60 * 1000 * 2
+      ),
     },
   });
 
@@ -157,125 +159,126 @@ const CreateEvent = () => {
   );
   if (step === STEPS.AGENDA) {
     bodyContent = (
-      <div className="flex flex-col gap-8">
-        <DatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-        />
-        <div className="mt-5">
-          <div className="mb-5">
-            <button
-              type="button"
-              className={agenda === "Day1" ? "underline mr-5" : "mr-5"}
-              onClick={() => setAgenda("Day1")}
-            >
-              Day 1
-            </button>
-            <button
-              className={agenda === "Day2" ? "underline" : undefined}
-              onClick={() => setAgenda("Day2")}
-              type="button"
-            >
-              Day 2
-            </button>
-          </div>
-          {agenda === "Day1" ? (
-            <input
-              placeholder="Agenda Day 1"
-              type="text"
-              id="agenda_day_one"
-              {...register("agenda_day_one", { required: true })}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 h-[350px] mb-5"
+      <div className="shadow-md sm:rounded-lg h-[75vh]">
+        <div className="bg-white border-b flex items-center">
+          <p className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+            Submittion
+          </p>
+          <p className="px-6 py-4">
+            from{" "}
+            <Controller
+              name="date"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => (
+                <DatePicker
+                  className="border border-gray-500 p-2 rounded cursor-pointer"
+                  selected={new Date(value)}
+                  onChange={onChange}
+                />
+              )}
             />
-          ) : (
-            <input
-              placeholder="Agenda Day 2"
-              type="text"
-              id="agenda_day_two"
-              {...register("agenda_day_two", { required: true })}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 h-[350px] mb-5"
+          </p>
+          <p className="px-6 py-4">
+            to{" "}
+            <Controller
+              name="aplication_deadline"
+              rules={{ required: true }}
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <DatePicker
+                  className="border border-gray-500 p-2 rounded cursor-pointer"
+                  selected={new Date(value)}
+                  onChange={onChange}
+                />
+              )}
             />
-          )}
+          </p>
         </div>
       </div>
+      // <div className="flex flex-col gap-8">
+      //   <DatePicker
+      //     selected={startDate}
+      //     onChange={(date) => setStartDate(date)}
+      //   />
+      //   <div className="mt-5">
+      //     <div className="mb-5">
+      //       <button
+      //         type="button"
+      //         className={agenda === "Day1" ? "underline mr-5" : "mr-5"}
+      //         onClick={() => setAgenda("Day1")}
+      //       >
+      //         Day 1
+      //       </button>
+      //       <button
+      //         className={agenda === "Day2" ? "underline" : undefined}
+      //         onClick={() => setAgenda("Day2")}
+      //         type="button"
+      //       >
+      //         Day 2
+      //       </button>
+      //     </div>
+      //     {agenda === "Day1" ? (
+      //       <input
+      //         placeholder="Agenda Day 1"
+      //         type="text"
+      //         id="agenda_day_one"
+      //         {...register("agenda_day_one", { required: true })}
+      //         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 h-[350px] mb-5"
+      //       />
+      //     ) : (
+      //       <input
+      //         placeholder="Agenda Day 2"
+      //         type="text"
+      //         id="agenda_day_two"
+      //         {...register("agenda_day_two", { required: true })}
+      //         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 h-[350px] mb-5"
+      //       />
+      //     )}
+      //   </div>
+      // </div>
     );
   }
   if (step === STEPS.TEAMS) {
     bodyContent = (
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <tbody>
-            <tr className="bg-white border-b">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-              >
-                Submittion
-              </th>
-              <td className="px-6 py-4">
-                from{" "}
-                <Controller
-                  name="date"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <DatePicker
-                      selected={new Date(value)}
-                      onChange={onChange}
-                    />
-                  )}
-                />
-              </td>
-              <td className="px-6 py-4">
-                to{" "}
-                <Controller
-                  name="aplication_deadline"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <DatePicker
-                      selected={new Date(value)}
-                      onChange={onChange}
-                    />
-                  )}
-                />
-              </td>
-            </tr>
-            {/* <tr className="border-b bg-gray-50 ">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-              >
-                Event
-              </th>
-              <td className="px-6 py-4">
-                from{" "}
-                <Controller
-                  name="aplication_deadline"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <DatePicker
-                      selected={new Date(value)}
-                      onChange={onChange}
-                    />
-                  )}
-                />
-              </td>
-              <td className="px-6 py-4">
-                to{" "}
-                <Controller
-                  name="aplication_deadline"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <DatePicker
-                      selected={new Date(value)}
-                      onChange={onChange}
-                    />
-                  )}
-                />
-              </td>
-            </tr> */}
-          </tbody>
-        </table>
-      </div>
+      // <div className="shadow-md sm:rounded-lg">
+      //   <div className="bg-white border-b flex items-center">
+      //     <p className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+      //       Submittion
+      //     </p>
+      //     <p className="px-6 py-4">
+      //       from{" "}
+      //       <Controller
+      //         name="date"
+      //         control={control}
+      //         rules={{ required: true }}
+      //         render={({ field: { onChange, value } }) => (
+      //           <DatePicker
+      //             className="border border-gray-500 p-2 rounded cursor-pointer"
+      //             selected={new Date(value)}
+      //             onChange={onChange}
+      //           />
+      //         )}
+      //       />
+      //     </p>
+      //     <p className="px-6 py-4">
+      //       to{" "}
+      //       <Controller
+      //         name="aplication_deadline"
+      //         rules={{ required: true }}
+      //         control={control}
+      //         render={({ field: { onChange, value } }) => (
+      //           <DatePicker
+      //             className="border border-gray-500 p-2 rounded cursor-pointer"
+      //             selected={new Date(value)}
+      //             onChange={onChange}
+      //           />
+      //         )}
+      //       />
+      //     </p>
+      //   </div>
+      // </div>
+      <p></p>
     );
   }
   if (step === STEPS.STATISTICS) {
