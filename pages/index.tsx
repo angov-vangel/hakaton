@@ -1,9 +1,10 @@
 import CreateEvent from "@/components/CreateEvent";
+import { Footer } from "@/components/Footer";
 import UserFormRegister from "@/components/UserFormRegister";
 import React from "react";
 export default function Home() {
   return (
-    <div className="">
+    <div className="h-[100vh]">
       {/* <UserFormRegister /> */}
       <div className="flex w-full">
         <div className="w-1/4"></div>
@@ -11,6 +12,7 @@ export default function Home() {
           <CreateEvent />
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
