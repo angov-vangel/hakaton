@@ -40,7 +40,7 @@ const CreateEvent = () => {
     watch,
     formState: { errors },
     reset,
-  } = useForm<FieldValues>({
+  } = useForm<FormValues>({
     defaultValues: {
       location: "",
       event_type_id: "",
@@ -56,9 +56,9 @@ const CreateEvent = () => {
     },
   });
 
-  const category = watch("category");
+  // const category = watch("category");
 
-   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     
    }
   //   if (step !== STEPS.PRICE) {
@@ -159,7 +159,7 @@ const CreateEvent = () => {
           </div>
           {agenda === "Day1" ? (
             <input
-              placeholder="Day 1 agenda"
+              placeholder="Agenda Day 1"
               type="text"
               id="agenda_day_one"
               {...register("agenda_day_one", { required: true })}

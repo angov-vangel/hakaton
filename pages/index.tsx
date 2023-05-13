@@ -1,5 +1,6 @@
 import CreateEvent from "@/components/CreateEvent";
 import { Footer } from "@/components/Footer";
+import { LoginForm } from "@/components/LoginForm";
 import UserFormRegister from "@/components/UserFormRegister";
 import React from "react";
 export default function Home() {
@@ -9,6 +10,7 @@ export default function Home() {
       <div className="flex w-full">
         <div className="w-1/4"></div>
         <div className="w-3/4">
+          <LoginForm/>
           <CreateEvent />
         </div>
       </div>
