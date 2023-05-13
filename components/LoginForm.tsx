@@ -4,9 +4,13 @@ import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-interface FieldValues {
+interface LoginFormData {
   username: string;
   password: string;
+}
+
+interface LoginResponseData {
+  token: string;
 }
 export const LoginForm = () => {
   const [error, setServerError] = useState("");
@@ -16,45 +20,39 @@ export const LoginForm = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<FieldValues>({
+  } = useForm<LoginFormData>({
     defaultValues: {
       username: "",
       password: "",
     },
   });
-  
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+
+  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     setSubmitting(true);
     try {
-      const response = await axios.post(
+      const response = await axios.post<LoginResponseData>(
         "https://mimica-kuzmanovska.sharedwithexpose.com/",
+        data
+      );
+      const token = response.data.token;
+      localStorage.setItem("token", token); // Store the token in local storage
+      // You can use the token to authenticate future requests to the server
+      const authenticatedResponse = await axios.get(
+        "https://mimica-kuzmanovska.sharedwithexpose.com/protected",
         {
-          data,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
-      console.log(response.data);
+      console.log(authenticatedResponse.data);
+      reset();
     } catch (error: AxiosError | any) {
-      setServerError(error.message);
+      setServerError("Invalid email or password");
     } finally {
       setSubmitting(false);
     }
   };
-
-  //   useEffect(() => {
-  //     const fetchAcademies = async () => {
-  //       try {
-  //         const response = await axios.get<Academy[]>(
-  //           "https://a769-92-55-111-13.ngrok-free.app/api/academies"
-  //         );
-  //         setAcademies(response.data);
-  //         console.log(response.data);
-  //       } catch (error) {
-  //         console.error(error);
-  //       }
-  //     };
-
-  //     fetchAcademies();
-  //   }, []);
 
   return (
     <section className="">

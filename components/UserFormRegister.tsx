@@ -24,6 +24,7 @@ const RegistrationForm = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormValues>();
   const [submitting, setSubmitting] = useState(false);
