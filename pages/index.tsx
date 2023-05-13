@@ -9,6 +9,7 @@ export default function Home() {
     <div className="h-[100vh]">
       {/* <UserFormRegister /> */}
       <LoginForm />
+
       <div className="flex w-full">
         <div className="w-1/4">
           <LogoPlaceholder />
@@ -17,6 +18,7 @@ export default function Home() {
           <CreateEvent />
         </div>
       </div>
+
       <Footer />
     </div>
   );

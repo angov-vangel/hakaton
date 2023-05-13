@@ -56,7 +56,7 @@ const RegistrationForm = () => {
     const fetchAcademies = async () => {
       try {
         const response = await axios.get<Academy[]>(
-          "https://b81a-92-55-111-2.ngrok-free.app/api/academies"
+          "https://mimica-kuzmanovska.sharedwithexpose.com/api/academies"
         );
         setAcademies(response.data);
         console.log(response.data);
@@ -73,7 +73,7 @@ const RegistrationForm = () => {
       const fetchFoodPreferences = async () => {
         try {
           const response = await axios.get<string[]>(
-            `/api/academies/${selectedAcademy.id}/food-preferences`
+            `https://mimica-kuzmanovska.sharedwithexpose.com/api/food-preferences`
           );
           setFoodPreferences(response.data);
         } catch (error) {
