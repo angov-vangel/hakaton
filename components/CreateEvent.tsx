@@ -299,7 +299,7 @@ const CreateEvent = () => {
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         {step === 0 && (
-          <div className="w-1/4 mb-5">
+          <div className="w-2/4 mb-5">
             <input
               placeholder="Name of the event"
               type="text"
@@ -314,13 +314,13 @@ const CreateEvent = () => {
             )}
           </div>
         )}
-        <nav className=" w-3/4 flex justify-between">
+        <nav className=" flex justify-between">
           {stepsArr.map((st, i) => (
             <button
               type="button"
               onClick={() => setStep(i)}
               key={st}
-              className={step === i ? "underline text-xl" : "text-xl"}
+              className={step === i ? "underline mr-4 text-xl" : i === 1  ? "mr-20 text-xl":"mr-4 text-xl" }
             >
               {st}
             </button>
@@ -338,11 +338,11 @@ const CreateEvent = () => {
             Share
           </button>
         </nav>
-        <div className="w-3/4">{bodyContent}</div>
+        <div className="">{bodyContent}</div>
       </form>
       <button
         type="button"
-        className="ml-auto block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="ml-auto mt-5 block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
         export to Excel sheet
       </button>
