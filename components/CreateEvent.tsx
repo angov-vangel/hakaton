@@ -58,9 +58,7 @@ const CreateEvent = () => {
 
   // const category = watch("category");
 
-   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    
-   }
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {};
   //   if (step !== STEPS.PRICE) {
   //     return onNext();
   //   }
@@ -83,26 +81,30 @@ const CreateEvent = () => {
     <div className="flex flex-col gap-8">
       <div className="w-3/4 mt-5">
         <div className="flex gap-4 mb-5">
-          <input
-            placeholder="Location"
-            type="text"
-            id="location"
-            {...register("location", { required: true })}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
-          />
-          {errors.location && (
-            <span className="text-red-500">Location is required</span>
-          )}
-          <input
-            placeholder="Type of event"
-            type="text"
-            id="event_type_id"
-            {...register("event_type_id", { required: true })}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
-          />
-          {errors.event_type_id && (
-            <span className="text-red-500">Event type is required</span>
-          )}
+          <div>
+            <input
+              placeholder="Location"
+              type="text"
+              id="location"
+              {...register("location", { required: true })}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
+            />
+            {errors.location && (
+              <span className="text-red-500">Location is required</span>
+            )}
+          </div>
+          <div>
+            <input
+              placeholder="Type of event"
+              type="text"
+              id="event_type_id"
+              {...register("event_type_id", { required: true })}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
+            />
+            {errors.event_type_id && (
+              <span className="text-red-500">Event type is required</span>
+            )}
+          </div>
         </div>
         <input
           placeholder="Academies part of the event"
@@ -201,7 +203,7 @@ const CreateEvent = () => {
   }
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         {step === 0 && (
           <div className="w-1/4 mb-5">
             <input
@@ -230,8 +232,14 @@ const CreateEvent = () => {
             </button>
           ))}
           <button
-            className="ml-5 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
             type="submit"
+            className="ml-5 bg-greenish hover:bg-green-500 font-semibold hover:text-white py-2 px-4 border border-black-500 hover:border-transparent rounded"
+          >
+            Create
+          </button>
+          <button
+            className="ml-5 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+            type="button"
           >
             Share
           </button>
