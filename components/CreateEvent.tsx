@@ -233,9 +233,9 @@ const CreateEvent = () => {
           ))}
           <button
             type="submit"
-            className="ml-5 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+            className="ml-5 bg-greenish hover:bg-green-500 font-semibold hover:text-white py-2 px-4 border border-black-500 hover:border-transparent rounded"
           >
-            Create Event
+            Create
           </button>
           <button
             className="ml-5 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
