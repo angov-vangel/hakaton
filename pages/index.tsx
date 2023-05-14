@@ -1,4 +1,4 @@
-import Charts from "@/components/Charts";
+
 import CreateEvent from "@/components/CreateEvent";
 import { Footer } from "@/components/Footer";
 import { LoginForm } from "@/components/LoginForm";

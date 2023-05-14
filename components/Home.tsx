@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <>
       <div className="w-10/12 mx-auto py-10 border-b-2 border-[#0AE47C]">
-        <Image src={Logo.src} alt={"Logo"} className="ml-auto mt-7" />
+        <Image src={Logo.src} alt={"Logo"} width={150} height={150} className="ml-auto mt-7" />
 
         <nav className=" w-8/12 mx-auto">
           <ul className="flex justify-between items-center mt-10">
@@ -113,7 +113,8 @@ export default function Home() {
             </div>
           </div>
           <div>
-            <Image
+            <Image width={150}
+            height={150}
               src={HeroImg.src}
               alt={"Hero Banners"}
               className=" w-[500px] h-auto"
