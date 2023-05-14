@@ -46,7 +46,37 @@ const CreateEvent = () => {
   const [submitting, setSubmitting] = useState(false);
   const [agenda, setAgenda] = useState("Day1");
   const [activationBtn, setActivationBtn] = useState(false);
+  [
+    {
+      id: 1,
+      event_type_id: 1,
+      academy_id: 7,
+      name: "Hackaton 1",
+      location: "",
+      start_date: "2023-05-14",
+      info: "This is info for Hackaton 1",
+      client_info: "",
+      max_participants: 200,
+      application_deadline: "2023-05-15",
+      created_at: "2023-05-13T15:06:05.000000Z",
+      updated_at: "2023-05-13T15:06:05.000000Z",
+    },
+    {
+      id: 2,
+      event_type_id: 1,
+      academy_id: 5,
+      name: "Hackaton 6 edited",
+      location: "",
+      start_date: "2023-05-14",
+      info: "info for hackaton 5",
+      client_info: "",
+      max_participants: 200,
+      application_deadline: "2023-05-14",
+      created_at: "2023-05-13T15:07:34.000000Z",
+      updated_at: "2023-05-13T16:14:00.000000Z",
+    },
 
+  ];
   const {
     register,
     handleSubmit,
@@ -76,7 +106,7 @@ const CreateEvent = () => {
     try {
       setSubmitting(true);
       setServerError("");
-      const response = await axios.post("/api/registration", data);
+      const response = await axios.post('https://mimica-kuzmanovska.sharedwithexpose.com/api/events', data);
       console.log(response.data);
       setActivationBtn(true);
     } catch (error: AxiosError | any) {
@@ -117,7 +147,7 @@ const CreateEvent = () => {
         </div>
         <div className="mb-5">
           <div className="flex items-center gap-5">
-            <div className="items-center w-[49.5%] flex bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full   font-medium text-gray-900 whitespace-nowrap">
+            <div className="items-center w-[49.5%] flex bg-white border border-gray-300 text-sm rounded-lg  block font-medium text-gray-900 whitespace-nowrap">
               <p className="text-gray-400 font-normal pl-2">Submittion</p>
               <div className="px-3 py-1 relative">
                 from
