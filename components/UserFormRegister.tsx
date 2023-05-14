@@ -177,7 +177,7 @@ const RegistrationForm = () => {
                 type="checkbox"
                 id="participation"
                 {...register("participation")}
-                className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg  block w-full p-2.5 "
+                className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg  block  p-2.5 w-8 h-8 "
               />
               <label htmlFor="participation_live" className="ml-2 text-black">
                 Live
@@ -188,7 +188,7 @@ const RegistrationForm = () => {
                 type="checkbox"
                 id="participation"
                 {...register("participation")}
-                className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg  block w-full p-2.5 "
+                className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg  block  p-2.5 w-8 h-8 "
               />
               <label htmlFor="participation_online" className="ml-2 text-black">
                 Online
@@ -224,6 +224,7 @@ const RegistrationForm = () => {
           <input
             type="checkbox"
             id="participation"
+            checked
             {...register("participation")}
             className="form-checkbox h-5 w-5 text-gray-600  transition duration-150 ease-in-out accent-white"
           />
