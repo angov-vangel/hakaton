@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Logo from "../public/img/Frame.png";
-import HeroImg from "../public/img/hero-img.png";
+import HeroImg from "../public/img/HERO IMAGE 2.png";
 import BrainsterLogo from "../public/img/Brainster-Logo 1.png";
 import ScandivLogo from "../public/img/LogoSCiDEV 1.png";
 import Link from "next/link";
@@ -91,7 +91,7 @@ export default function Home() {
             </li>
             <li className="mb-5">
               <Link
-                href="/user-register"
+                href="/login"
                 className="font-roboto text-lg text-white font-semibold bg-[#0AE47C] py-2 px-7 rounded-lg "
               >
                 Sign up
