@@ -110,7 +110,6 @@ export default function Home() {
           <div className="text-[#0AE47C] font-bold text-5xl leading-normal flex flex-col">
             <h1>
               <br></br> HackMatch<br></br>
-              HACKATHON
             </h1>
             <div>
               <button className="bg-white text-[#0AE47C] py-1 px-2 rounded-lg mt-5 text-lg border-[#0AE47C] border-2">
