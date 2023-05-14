@@ -16,8 +16,8 @@ export default function Home() {
         <Image
           src={Logo.src}
           alt={"Logo"}
-          width={150}
-          height={150}
+          width={75}
+          height={75}
           className="ml-auto mt-7"
         />
 
@@ -83,24 +83,12 @@ export default function Home() {
                 FAQ
               </Link>
             </li>
-            <li>
-              <Link
-                href="/meetyourteam"
-                className={`font-roboto text-lg ${
-                  asPath === "/faq"
-                    ? "font-bold text-[#0AE47C] border-b-4 border-[#8A8787]"
-                    : ""
-                }`}
-              >
-                Meet your team
-              </Link>
-            </li>
             <li className="mb-5">
               <Link
                 href="/login"
                 className="font-roboto text-lg text-white font-semibold bg-[#0AE47C] py-2 px-7 rounded-lg "
               >
-               Log in
+                Log in
               </Link>
             </li>
           </ul>
