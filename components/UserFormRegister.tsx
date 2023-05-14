@@ -69,7 +69,7 @@ const RegistrationForm = () => {
     const academyId = Number(event.target.value);
     const academy = academies.find((a) => a.id === academyId) || null;
     setSelectedAcademy(academy);
-    setOptions([]); // clear the options state when academy is changed
+    setOptions([]);
   };
 
   return (
@@ -89,7 +89,7 @@ const RegistrationForm = () => {
         />
         {errors.name && <span className="text-red-500">Name is required</span>}
         <label htmlFor="lastName" className="text-black font-semibold">
-          last Name
+          Last Name
         </label>
         <input
           type="lastName"
