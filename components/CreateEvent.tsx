@@ -10,6 +10,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Charts from "./Charts";
 import { Agenda } from "./Agenda";
+import Teams from "./Teams";
 
 // CSS Modules, react-datepicker-cssmodules.css
 // import 'react-datepicker/dist/react-datepicker-cssmodules.css';
@@ -249,13 +250,23 @@ const CreateEvent = () => {
   }
 
   if (step === STEPS.AGENDA) {
-    bodyContent = <Agenda />;
+    bodyContent = (
+      <div className="mt-10">
+        <Agenda />
+      </div>
+    );
   }
   if (step === STEPS.STATISTICS) {
     bodyContent = (
-      <div className="flex flex-col gap-8">
-        <Heading title="Statictics" />
+      <div className="mt-10">
         <Charts />
+      </div>
+    );
+  }
+  if (step === STEPS.TEAMS) {
+    bodyContent = (
+      <div className="mt-10">
+        <Teams />
       </div>
     );
   }

@@ -18,7 +18,6 @@ function Charts() {
           <Image src="/img/chart3.png" alt={"chart"} width={400} height={300} />
         </div>
         <div>
-          <h2 className="text-lg font-medium mb-4">Other Statistics</h2>
           <Image src="/img/chart!.png" alt={"chart"} width={800} height={300} />
         </div>
         <div className="w-1/2">
