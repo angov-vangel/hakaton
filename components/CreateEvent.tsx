@@ -167,11 +167,7 @@ const CreateEvent = () => {
         </div>
         <div className="mb-5">
           <div className="flex items-center gap-5">
-<<<<<<< Updated upstream
             <div className="items-center w-[49.5%] flex bg-white border border-gray-300 text-sm rounded-lg   font-medium text-gray-900 whitespace-nowrap">
-=======
-            <div className="items-center w-[49.5%] flex bg-white border border-gray-300 text-sm rounded-lg  font-medium text-gray-900 whitespace-nowrap">
->>>>>>> Stashed changes
               <p className="text-gray-400 font-normal pl-2">Submittion</p>
               <div className="px-3 py-1 relative">
                 from
