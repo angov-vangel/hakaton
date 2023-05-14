@@ -6,12 +6,13 @@ import {
   SubmitHandler,
   useForm,
 } from "react-hook-form";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { Heading } from "./Heading";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import Charts from "./Charts";
 
 // CSS Modules, react-datepicker-cssmodules.css
 // import 'react-datepicker/dist/react-datepicker-cssmodules.css';
@@ -32,8 +33,6 @@ interface FormValues {
   date: Date;
   event_info: string;
   client_info: string;
-  agenda_day_one: string;
-  agenda_day_two: string;
   max_participants: number;
   aplication_deadline: Date;
 }
@@ -41,10 +40,12 @@ interface FormValues {
 const CreateEvent = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [error, setServerError] = useState<AxiosError | any>("");
   const stepsArr = ["Description", "Agenda", "Teams", "Statistics", "Results"];
   const [step, setStep] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
   const [agenda, setAgenda] = useState("Day1");
+  const [activationBtn,setActivationBtn] = useState(false)
 
   const {
     register,
@@ -64,72 +65,132 @@ const CreateEvent = () => {
       event_info: "",
       client_info: "",
       max_participants: 0,
-      agenda_day_one: "",
-      agenda_day_two: "",
       aplication_deadline: new Date(
         new Date().getTime() + 24 * 60 * 60 * 1000 * 2
       ),
     },
   });
 
-  // const category = watch("category");
-
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     console.log(data.date);
+    try {
+      setSubmitting(true);
+      setServerError("");
+      const response = await axios.post("/api/registration", data);
+      console.log(response.data);
+      setActivationBtn(true);
+    } catch (error: AxiosError | any) {
+      setServerError(error.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
-  //   if (step !== STEPS.PRICE) {
-  //     return onNext();
-  //   }
-  //   setIsLoading(true);
-
-  //   axios
-  //     .post("/api/products", data)
-  //     .then(() => {
-  //       router.refresh();
-  //       reset();
-  //       setStep(STEPS.CATEGORY);
-  //     })
-  //     .catch(() => {})
-  //     .finally(() => {
-  //       setIsLoading(false);
-  //     });
-  // };
 
   let bodyContent = (
     <div className="flex flex-col gap-8">
-      <div className="w-3/4 mt-5">
-        <div className="flex gap-4 mb-5">
-          <div>
+      <div className="w-full mt-5">
+        <div className="flex gap-4 mb-5 w-full">
+          <div className="grow">
             <input
               placeholder="Location"
               type="text"
               id="location"
-              {...register("location", { required: true })}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
+              {...register("location", { required: true, maxLength: 25 })}
+              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
             />
             {errors.location && (
               <span className="text-red-500">Location is required</span>
             )}
           </div>
-          <div>
+          <div className="grow">
             <input
               placeholder="Type of event"
               type="text"
               id="event_type_id"
-              {...register("event_type_id", { required: true })}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
+              {...register("event_type_id", { required: true, maxLength: 25 })}
+              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
             />
             {errors.event_type_id && (
               <span className="text-red-500">Event type is required</span>
             )}
           </div>
         </div>
+        <div className="mb-5">
+          <div className="flex items-center gap-5">
+            <div className="items-center w-[49.5%] flex bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full   font-medium text-gray-900 whitespace-nowrap">
+              <p className="text-gray-400 font-normal pl-2">Submittion</p>
+              <div className="px-3 py-1 relative">
+                from
+                <Controller
+                  name="date"
+                  control={control}
+                  rules={{ required: true, maxLength: 25 }}
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                      className="border border-gray-300 bg-white p-2 rounded cursor-pointer"
+                      selected={new Date(value)}
+                      onChange={onChange}
+                    />
+                  )}
+                />{" "}
+              </div>
+              <div className="px-6 py-1 relative">
+                to
+                <Controller
+                  name="aplication_deadline"
+                  control={control}
+                  rules={{ required: true, maxLength: 25 }}
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                      className="border border-gray-300 bg-white p-2 rounded cursor-pointer"
+                      selected={new Date(value)}
+                      onChange={onChange}
+                    />
+                  )}
+                />{" "}
+              </div>
+            </div>
+            {/* <div className="items-center w-[49.5%] flex bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full   font-medium text-gray-900 whitespace-nowrap">
+              <p className="text-gray-400 font-normal pl-2">Event duration</p>
+              <div className="px-3 py-1 relative">
+                from
+                <Controller
+                  name="date"
+                  control={control}
+                  rules={{ required: true ,maxLength:25 }}
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                      className="border border-gray-300 bg-white p-2 rounded cursor-pointer"
+                      selected={new Date(value)}
+                      onChange={onChange}
+                    />
+                  )}
+                />{" "}
+              </div>
+              <div className="px-6 py-1 relative">
+                to
+                <Controller
+                  name="aplication_deadline"
+                  control={control}
+                  rules={{ required: true ,maxLength:25 }}
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                      className="border border-gray-300 bg-white p-2 rounded cursor-pointer"
+                      selected={new Date(value)}
+                      onChange={onChange}
+                    />
+                  )}
+                />{" "}
+              </div>
+            </div> */}
+          </div>
+        </div>
         <input
           placeholder="Academies part of the event"
           type="text"
           id="academy_id"
-          {...register("academy_id", { required: true })}
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
+          {...register("academy_id", { required: true, maxLength: 25 })}
+          className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
         />
         {errors.academy_id && (
           <span className="text-red-500">Field is required is required</span>
@@ -138,8 +199,8 @@ const CreateEvent = () => {
           placeholder="Event info"
           type="text"
           id="event_info"
-          {...register("event_info", { required: true })}
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm mt-5 rounded-lg h-[250px]  block w-full p-2.5"
+          {...register("event_info", { required: true, maxLength: 25 })}
+          className="bg-white border border-gray-300 text-gray-900 text-sm mt-5 rounded-lg h-[250px]  block w-full p-2.5"
         />
         {errors.event_info && (
           <span className="text-red-500">Field is required is required</span>
@@ -148,8 +209,8 @@ const CreateEvent = () => {
           placeholder="Client info"
           type="text"
           id="client_info"
-          {...register("client_info", { required: true })}
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm mt-5 rounded-lg h-[250px]  block w-full p-2.5"
+          {...register("client_info", { required: true, maxLength: 25 })}
+          className="bg-white border border-gray-300 text-gray-900 text-sm mt-5 rounded-lg h-[250px]  block w-full p-2.5"
         />
         {errors.client_info && (
           <span className="text-red-500">Field is required is required</span>
@@ -161,15 +222,15 @@ const CreateEvent = () => {
     bodyContent = (
       <div className="shadow-md sm:rounded-lg h-[75vh]">
         <div className="bg-white border-b flex items-center">
-          <p className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+          <div className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
             Submittion
-          </p>
-          <p className="px-6 py-4">
-            from{" "}
+          </div>
+          <div className="px-6 py-4">
+            from
             <Controller
               name="date"
               control={control}
-              rules={{ required: true }}
+              rules={{ required: true, maxLength: 25 }}
               render={({ field: { onChange, value } }) => (
                 <DatePicker
                   className="border border-gray-500 p-2 rounded cursor-pointer"
@@ -178,12 +239,12 @@ const CreateEvent = () => {
                 />
               )}
             />
-          </p>
-          <p className="px-6 py-4">
+          </div>
+          <div className="px-6 py-4">
             to{" "}
             <Controller
               name="aplication_deadline"
-              rules={{ required: true }}
+              rules={{ required: true, maxLength: 25 }}
               control={control}
               render={({ field: { onChange, value } }) => (
                 <DatePicker
@@ -193,7 +254,7 @@ const CreateEvent = () => {
                 />
               )}
             />
-          </p>
+          </div>
         </div>
       </div>
       // <div className="flex flex-col gap-8">
@@ -223,16 +284,16 @@ const CreateEvent = () => {
       //         placeholder="Agenda Day 1"
       //         type="text"
       //         id="agenda_day_one"
-      //         {...register("agenda_day_one", { required: true })}
-      //         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 h-[350px] mb-5"
+      //         {...register("agenda_day_one", { required: true ,maxLength:25 })}
+      //         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 h-[350px] mb-5"
       //       />
       //     ) : (
       //       <input
       //         placeholder="Agenda Day 2"
       //         type="text"
       //         id="agenda_day_two"
-      //         {...register("agenda_day_two", { required: true })}
-      //         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 h-[350px] mb-5"
+      //         {...register("agenda_day_two", { required: true ,maxLength:25 })}
+      //         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 h-[350px] mb-5"
       //       />
       //     )}
       //   </div>
@@ -251,7 +312,7 @@ const CreateEvent = () => {
       //       <Controller
       //         name="date"
       //         control={control}
-      //         rules={{ required: true }}
+      //         rules={{ required: true ,maxLength:25 }}
       //         render={({ field: { onChange, value } }) => (
       //           <DatePicker
       //             className="border border-gray-500 p-2 rounded cursor-pointer"
@@ -265,7 +326,7 @@ const CreateEvent = () => {
       //       to{" "}
       //       <Controller
       //         name="aplication_deadline"
-      //         rules={{ required: true }}
+      //         rules={{ required: true ,maxLength:25 }}
       //         control={control}
       //         render={({ field: { onChange, value } }) => (
       //           <DatePicker
@@ -285,6 +346,7 @@ const CreateEvent = () => {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading title="Statictics" />
+        <Charts />
       </div>
     );
   }
@@ -296,16 +358,16 @@ const CreateEvent = () => {
     );
   }
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <div className="w-full">
+      <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
         {step === 0 && (
-          <div className="w-2/4 mb-5">
+          <div className="w-1/4 mb-5 relative">
             <input
               placeholder="Name of the event"
               type="text"
               id="name"
-              {...register("name", { required: true })}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
+              {...register("name", { required: true, maxLength: 25 })}
+              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
             />
             {errors.name && (
               <span className="text-red-500">
@@ -320,7 +382,15 @@ const CreateEvent = () => {
               type="button"
               onClick={() => setStep(i)}
               key={st}
-              className={step === i ? "underline mr-4 text-xl" : i === 1  ? "mr-20 text-xl":"mr-4 text-xl" }
+              className={
+                i === 0
+                  ? "mr-20 text-xl"
+                  : step === i && i === 0
+                  ? "underline mr-20 text-xl"
+                  : step === i
+                  ? "underline mr-4 text-xl"
+                  : "mr-4 text-xl"
+              }
             >
               {st}
             </button>
@@ -332,17 +402,17 @@ const CreateEvent = () => {
             Create
           </button>
           <button
-            className="ml-5 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+            className="ml-5 bg-gray-100 hover:bg-gray-200  font-semibold py-2 px-4 border border-gray-900 hover:border-transparent rounded"
             type="button"
           >
             Share
           </button>
         </nav>
-        <div className="">{bodyContent}</div>
+        <div className="w-full">{bodyContent}</div>
       </form>
-      <button
+      <button disabled={activationBtn}
         type="button"
-        className="ml-auto mt-5 block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="ml-auto mt-8 block bg-orange-600 hover:bg-blue-700 font-bold py-2 px-8 rounded"
       >
         export to Excel sheet
       </button>

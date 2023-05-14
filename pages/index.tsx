@@ -7,9 +7,11 @@ import UserFormRegister from "@/components/UserFormRegister";
 import React from "react";
 import bgImage from "./../img/bg-image.png";
 import { Chart } from "react-chartjs-2";
+import { AvatarLogo } from "@/components/AvatarLogo";
 export default function Home() {
   return (
     <div className="h-[100vh]">
+      <AvatarLogo />
       {/* <LoginForm /> */}
       <div
         style={{
@@ -19,11 +21,10 @@ export default function Home() {
         }}
         className="flex w-full px-10 py-20"
       >
-        <div className="mx-auto">
+        <div className="mx-auto w-3/4">
           <CreateEvent />
         </div>
       </div>
-      <Charts />
       <Footer />
     </div>
   );
