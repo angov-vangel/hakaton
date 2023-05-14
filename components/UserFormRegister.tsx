@@ -35,6 +35,10 @@ const RegistrationForm = () => {
   const [options, setOptions] = useState<Academy[]>([]);
 
   const onSubmit = async (data: FormValues) => {
+    if (Object.keys(errors).length > 0) {
+      return;
+    }
+
     try {
       setSubmitting(true);
       setServerError("");
@@ -42,6 +46,7 @@ const RegistrationForm = () => {
         ...data,
       });
       console.log(response.data);
+      reset();
     } catch (error: AxiosError | any) {
       setServerError(error.message);
     } finally {
