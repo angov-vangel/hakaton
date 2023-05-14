@@ -108,7 +108,7 @@ const CreateEvent = () => {
       start_date: new Date(),
       event_info: "",
       client_info: "",
-      max_participants: 0,
+      max_participants: 200,
       end_date: new Date(new Date().getTime() + 24 * 60 * 60 * 1000 * 2),
       application_deadline: new Date(
         new Date().getTime() + 24 * 60 * 60 * 1000 * 2
@@ -124,7 +124,14 @@ const CreateEvent = () => {
       setServerError("");
       const response = await axios.post(
         "https://mimica-kuzmanovska.sharedwithexpose.com/api/events",
-        data
+        {
+          ...data,
+          start_date: data.start_date.toISOString().substring(0, 10),
+          end_date: data.end_date.toISOString().substring(0, 10),
+          application_deadline: data.application_deadline
+            .toISOString()
+            .substring(0, 10),
+        }
       );
       console.log(response.data);
       setActivationBtn(true);
