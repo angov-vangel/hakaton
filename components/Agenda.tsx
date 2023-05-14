@@ -72,8 +72,8 @@ export const Agenda = () => {
               <select
                 className="border-2 border-gray-900 rounded"
                 id="hour-select"
-                value={selectedHour2}
-                onChange={(e) => setSelectedHour2(e.target.value)}
+                value={selectedHour5}
+                onChange={(e) => setSelectedHour5(e.target.value)}
               >
                 <option value="">to</option>
                 {hours.map((hour) => (
