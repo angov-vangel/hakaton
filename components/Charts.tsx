@@ -19,6 +19,7 @@ import {
     Legend
   );
   const DashboardPage = () => {
+    
     const options = {
       responsive: true,
       plugins: {

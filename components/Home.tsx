@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Logo from "../public/img/Frame.png";
 import HeroImg from "../public/img/HERO IMAGE 2.png";
@@ -92,7 +94,7 @@ export default function Home() {
                 href="/login"
                 className="font-roboto text-lg text-white font-semibold bg-[#0AE47C] py-2 px-7 rounded-lg "
               >
-                Log In
+                Sign up
               </Link>
             </li>
           </ul>
