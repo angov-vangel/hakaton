@@ -75,7 +75,6 @@ const CreateEvent = () => {
       created_at: "2023-05-13T15:07:34.000000Z",
       updated_at: "2023-05-13T16:14:00.000000Z",
     },
-
   ];
   const {
     register,
@@ -106,7 +105,10 @@ const CreateEvent = () => {
     try {
       setSubmitting(true);
       setServerError("");
-      const response = await axios.post('https://mimica-kuzmanovska.sharedwithexpose.com/api/events', data);
+      const response = await axios.post(
+        "https://mimica-kuzmanovska.sharedwithexpose.com/api/events",
+        data
+      );
       console.log(response.data);
       setActivationBtn(true);
     } catch (error: AxiosError | any) {
@@ -147,7 +149,7 @@ const CreateEvent = () => {
         </div>
         <div className="mb-5">
           <div className="flex items-center gap-5">
-            <div className="items-center w-[49.5%] flex bg-white border border-gray-300 text-sm rounded-lg  block font-medium text-gray-900 whitespace-nowrap">
+            <div className="items-center w-[49.5%] flex bg-white border border-gray-300 text-sm rounded-lg   font-medium text-gray-900 whitespace-nowrap">
               <p className="text-gray-400 font-normal pl-2">Submittion</p>
               <div className="px-3 py-1 relative">
                 from
