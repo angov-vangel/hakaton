@@ -74,7 +74,7 @@ const CreateEvent = () => {
     defaultValues: {
       location: "",
       event_type_id: "",
-      academy_id: undefined,
+      academy_id: [],
       name: "",
       start_date: new Date(),
       event_info: "",
