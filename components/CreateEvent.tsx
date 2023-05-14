@@ -1,11 +1,7 @@
 "use client";
-import { useMemo, useState } from "react";
-import {
-  Controller,
-  FieldValues,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { useState } from "react";
+import Select from "react-select";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { Heading } from "./Heading";
@@ -28,13 +24,14 @@ enum STEPS {
 interface FormValues {
   location: string;
   event_type_id: string;
-  academy_id: string;
+  academy_id: number | number[] | undefined;
   name: string;
-  date: Date;
+  start_date: Date;
   event_info: string;
   client_info: string;
   max_participants: number;
-  aplication_deadline: Date;
+  end_date: Date;
+  application_deadline: Date;
 }
 
 const CreateEvent = () => {
@@ -46,6 +43,23 @@ const CreateEvent = () => {
   const [submitting, setSubmitting] = useState(false);
   const [agenda, setAgenda] = useState("Day1");
   const [activationBtn, setActivationBtn] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
+  const handleChange = (value: any) => {
+    setSelectedOptions(value);
+  };
+  const options = [
+    { value: 1, label: "UX/UI Дизајн" },
+    { value: 2, label: "Дигитален Маркетинг" },
+    { value: 3, label: "Графички Дизајн" },
+    { value: 4, label: "Project & Product Management" },
+    { value: 5, label: "Data Science" },
+    { value: 6, label: "Човечки Ресурси" },
+    { value: 7, label: "Full-Stack програмирање" },
+    { value: 8, label: "Front-end програмирање" },
+    { value: 9, label: "Software testing" },
+    { value: 10, label: "Leadirship & Management" },
+  ];
   [
     {
       id: 1,
@@ -88,20 +102,22 @@ const CreateEvent = () => {
     defaultValues: {
       location: "",
       event_type_id: "",
-      academy_id: "",
+      academy_id: undefined,
       name: "",
-      date: new Date(),
+      start_date: new Date(),
       event_info: "",
       client_info: "",
       max_participants: 0,
-      aplication_deadline: new Date(
+      end_date: new Date(new Date().getTime() + 24 * 60 * 60 * 1000 * 2),
+      application_deadline: new Date(
         new Date().getTime() + 24 * 60 * 60 * 1000 * 2
       ),
     },
   });
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log(data.date);
+    console.log(data.start_date);
+    console.log(data.academy_id);
     try {
       setSubmitting(true);
       setServerError("");
@@ -135,13 +151,15 @@ const CreateEvent = () => {
             )}
           </div>
           <div className="grow">
-            <input
+            <select
               placeholder="Type of event"
-              type="text"
               id="event_type_id"
               {...register("event_type_id", { required: true, maxLength: 25 })}
               className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
-            />
+            >
+              <option value={1}>Live</option>
+              <option value={2}>Online</option>
+            </select>
             {errors.event_type_id && (
               <span className="text-red-500">Event type is required</span>
             )}
@@ -149,12 +167,16 @@ const CreateEvent = () => {
         </div>
         <div className="mb-5">
           <div className="flex items-center gap-5">
+<<<<<<< Updated upstream
             <div className="items-center w-[49.5%] flex bg-white border border-gray-300 text-sm rounded-lg   font-medium text-gray-900 whitespace-nowrap">
+=======
+            <div className="items-center w-[49.5%] flex bg-white border border-gray-300 text-sm rounded-lg  font-medium text-gray-900 whitespace-nowrap">
+>>>>>>> Stashed changes
               <p className="text-gray-400 font-normal pl-2">Submittion</p>
               <div className="px-3 py-1 relative">
                 from
                 <Controller
-                  name="date"
+                  name="start_date"
                   control={control}
                   rules={{ required: true, maxLength: 25 }}
                   render={({ field: { onChange, value } }) => (
@@ -169,7 +191,7 @@ const CreateEvent = () => {
               <div className="px-6 py-1 relative">
                 to
                 <Controller
-                  name="aplication_deadline"
+                  name="end_date"
                   control={control}
                   rules={{ required: true, maxLength: 25 }}
                   render={({ field: { onChange, value } }) => (
@@ -182,14 +204,13 @@ const CreateEvent = () => {
                 />{" "}
               </div>
             </div>
-            {/* <div className="items-center w-[49.5%] flex bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full   font-medium text-gray-900 whitespace-nowrap">
-              <p className="text-gray-400 font-normal pl-2">Event duration</p>
+            <div className="items-center w-[49.5%] flex bg-white border border-gray-300 text-sm rounded-lg  font-medium text-gray-900 whitespace-nowrap">
+              <p className="text-gray-400 font-normal pl-2">Deadline</p>
               <div className="px-3 py-1 relative">
-                from
                 <Controller
-                  name="date"
+                  name="application_deadline"
                   control={control}
-                  rules={{ required: true ,maxLength:25 }}
+                  rules={{ required: true, maxLength: 25 }}
                   render={({ field: { onChange, value } }) => (
                     <DatePicker
                       className="border border-gray-300 bg-white p-2 rounded cursor-pointer"
@@ -199,34 +220,29 @@ const CreateEvent = () => {
                   )}
                 />{" "}
               </div>
-              <div className="px-6 py-1 relative">
-                to
-                <Controller
-                  name="aplication_deadline"
-                  control={control}
-                  rules={{ required: true ,maxLength:25 }}
-                  render={({ field: { onChange, value } }) => (
-                    <DatePicker
-                      className="border border-gray-300 bg-white p-2 rounded cursor-pointer"
-                      selected={new Date(value)}
-                      onChange={onChange}
-                    />
-                  )}
-                />{" "}
-              </div>
-            </div> */}
+            </div>
           </div>
         </div>
-        <input
-          placeholder="Academies part of the event"
-          type="text"
-          id="academy_id"
-          {...register("academy_id", { required: true, maxLength: 25 })}
-          className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
+        <Controller
+          name="academy_id"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <Select
+              isMulti
+              options={options}
+              onChange={(selected) => {
+                onChange(
+                  selected ? selected.map((option) => option.value) : []
+                );
+                handleChange(selected);
+              }}
+              value={options.filter((option) =>
+                Array.isArray(value) ? value.includes(option.value) : option
+              )}
+            />
+          )}
         />
-        {errors.academy_id && (
-          <span className="text-red-500">Field is required is required</span>
-        )}
+
         <input
           placeholder="Event info"
           type="text"
@@ -251,337 +267,337 @@ const CreateEvent = () => {
     </div>
   );
   if (step === STEPS.AGENDA) {
-    bodyContent = (
-      <div className="mt-3 shadow-md sm:rounded-lg">
-        <div>
-          <h2 className="mb-5 text-2xl mt-5">Day 1</h2>
-          <div className="bg-white border-b flex items-center">
-            <div className="px-6 w-1/2 py-4 font-medium text-gray-900 whitespace-nowrap">
-              Registration
-            </div>
-            <div className="px-6 py-4">
-              from
-              <Controller
-                name="date"
-                control={control}
-                rules={{ required: true, maxLength: 25 }}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    className="border border-gray-500 p-2 rounded cursor-pointer"
-                    selected={new Date(value)}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </div>
-            <div className="px-6 py-4">
-              to{" "}
-              <Controller
-                name="aplication_deadline"
-                rules={{ required: true, maxLength: 25 }}
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    className="border border-gray-500 p-2 rounded cursor-pointer"
-                    selected={new Date(value)}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className="bg-white border-b flex items-center">
-            <div className="px-6 py-4 w-1/2 font-medium text-gray-900 whitespace-nowrap">
-              Event opening
-            </div>
-            <div className="px-6 py-4">
-              from
-              <Controller
-                name="date"
-                control={control}
-                rules={{ required: true, maxLength: 25 }}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    className="border border-gray-500 p-2 rounded cursor-pointer"
-                    selected={new Date(value)}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </div>
-            <div className="px-6 py-4">
-              to{" "}
-              <Controller
-                name="aplication_deadline"
-                rules={{ required: true, maxLength: 25 }}
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    className="border border-gray-500 p-2 rounded cursor-pointer"
-                    selected={new Date(value)}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className="bg-white border-b flex items-center">
-            <div className="px-6 py-4 w-1/2 font-medium text-gray-900 whitespace-nowrap">
-              Find your spot
-            </div>
-            <div className="px-6 py-4">
-              from
-              <Controller
-                name="date"
-                control={control}
-                rules={{ required: true, maxLength: 25 }}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    className="border border-gray-500 p-2 rounded cursor-pointer"
-                    selected={new Date(value)}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </div>
-            <div className="px-6 py-4">
-              to{" "}
-              <Controller
-                name="aplication_deadline"
-                rules={{ required: true, maxLength: 25 }}
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    className="border border-gray-500 p-2 rounded cursor-pointer"
-                    selected={new Date(value)}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className="bg-white border-b flex items-center">
-            <div className="px-6 py-4 w-1/2 font-medium text-gray-900 whitespace-nowrap">
-              First round of membership sessions
-            </div>
-            <div className="px-6 py-4">
-              from
-              <Controller
-                name="date"
-                control={control}
-                rules={{ required: true, maxLength: 25 }}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    className="border border-gray-500 p-2 rounded cursor-pointer"
-                    selected={new Date(value)}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </div>
-            <div className="px-6 py-4">
-              to{" "}
-              <Controller
-                name="aplication_deadline"
-                rules={{ required: true, maxLength: 25 }}
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    className="border border-gray-500 p-2 rounded cursor-pointer"
-                    selected={new Date(value)}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className="bg-white border-b flex items-center">
-            <div className="px-6 py-4 w-1/2 font-medium text-gray-900 whitespace-nowrap">
-              Second round of membership sessions
-            </div>
-            <div className="px-6 py-4">
-              from
-              <Controller
-                name="date"
-                control={control}
-                rules={{ required: true, maxLength: 25 }}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    className="border border-gray-500 p-2 rounded cursor-pointer"
-                    selected={new Date(value)}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </div>
-            <div className="px-6 py-4">
-              to{" "}
-              <Controller
-                name="aplication_deadline"
-                rules={{ required: true, maxLength: 25 }}
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    className="border border-gray-500 p-2 rounded cursor-pointer"
-                    selected={new Date(value)}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </div>
-          </div>
-        </div>
-        <div>
-          <h2 className="mb-5 text-2xl mt-5">Day 2</h2>
-          <div className="bg-white border-b flex items-center">
-            <div className="px-6 py-4 w-1/2 font-medium text-gray-900 whitespace-nowrap">
-              Registration
-            </div>
-            <div className="px-6 py-4">
-              from
-              <Controller
-                name="date"
-                control={control}
-                rules={{ required: true, maxLength: 25 }}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    className="border border-gray-500 p-2 rounded cursor-pointer"
-                    selected={new Date(value)}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </div>
-            <div className="px-6 py-4">
-              to{" "}
-              <Controller
-                name="aplication_deadline"
-                rules={{ required: true, maxLength: 25 }}
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    className="border border-gray-500 p-2 rounded cursor-pointer"
-                    selected={new Date(value)}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className="bg-white border-b flex items-center">
-            <div className="px-6 py-4 w-1/2 font-medium text-gray-900 whitespace-nowrap">
-              First round of membership sessions
-            </div>
-            <div className="px-6 py-4">
-              from
-              <Controller
-                name="date"
-                control={control}
-                rules={{ required: true, maxLength: 25 }}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    className="border border-gray-500 p-2 rounded cursor-pointer"
-                    selected={new Date(value)}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </div>
-            <div className="px-6 py-4">
-              to{" "}
-              <Controller
-                name="aplication_deadline"
-                rules={{ required: true, maxLength: 25 }}
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    className="border border-gray-500 p-2 rounded cursor-pointer"
-                    selected={new Date(value)}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className="bg-white border-b flex items-center">
-            <div className="px-6 py-4 w-1/2 font-medium text-gray-900 whitespace-nowrap">
-              Second round of membership sessions
-            </div>
-            <div className="px-6 py-4">
-              from
-              <Controller
-                name="date"
-                control={control}
-                rules={{ required: true, maxLength: 25 }}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    className="border border-gray-500 p-2 rounded cursor-pointer"
-                    selected={new Date(value)}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </div>
-            <div className="px-6 py-4">
-              to{" "}
-              <Controller
-                name="aplication_deadline"
-                rules={{ required: true, maxLength: 25 }}
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    className="border border-gray-500 p-2 rounded cursor-pointer"
-                    selected={new Date(value)}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      // <div className="flex flex-col gap-8">
-      //   <DatePicker
-      //     selected={startDate}
-      //     onChange={(date) => setStartDate(date)}
-      //   />
-      //   <div className="mt-5">
-      //     <div className="mb-5">
-      //       <button
-      //         type="button"
-      //         className={agenda === "Day1" ? "underline mr-5" : "mr-5"}
-      //         onClick={() => setAgenda("Day1")}
-      //       >
-      //         Day 1
-      //       </button>
-      //       <button
-      //         className={agenda === "Day2" ? "underline" : undefined}
-      //         onClick={() => setAgenda("Day2")}
-      //         type="button"
-      //       >
-      //         Day 2
-      //       </button>
-      //     </div>
-      //     {agenda === "Day1" ? (
-      //       <input
-      //         placeholder="Agenda Day 1"
-      //         type="text"
-      //         id="agenda_day_one"
-      //         {...register("agenda_day_one", { required: true ,maxLength:25 })}
-      //         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 h-[350px] mb-5"
-      //       />
-      //     ) : (
-      //       <input
-      //         placeholder="Agenda Day 2"
-      //         type="text"
-      //         id="agenda_day_two"
-      //         {...register("agenda_day_two", { required: true ,maxLength:25 })}
-      //         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 h-[350px] mb-5"
-      //       />
-      //     )}
-      //   </div>
-      // </div>
-    );
+    // bodyContent = (
+    //   <div className="mt-3 shadow-md sm:rounded-lg">
+    //     <div>
+    //       <h2 className="mb-5 text-2xl mt-5">Day 1</h2>
+    //       <div className="bg-white border-b flex items-center">
+    //         <div className="px-6 w-1/2 py-4 font-medium text-gray-900 whitespace-nowrap">
+    //           Registration
+    //         </div>
+    //         <div className="px-6 py-4">
+    //           from
+    //           <Controller
+    //             name="date"
+    //             control={control}
+    //             rules={{ required: true, maxLength: 25 }}
+    //             render={({ field: { onChange, value } }) => (
+    //               <DatePicker
+    //                 className="border border-gray-500 p-2 rounded cursor-pointer"
+    //                 selected={new Date(value)}
+    //                 onChange={onChange}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //         <div className="px-6 py-4">
+    //           to{" "}
+    //           <Controller
+    //             name="end_date"
+    //             rules={{ required: true, maxLength: 25 }}
+    //             control={control}
+    //             render={({ field: { onChange, value } }) => (
+    //               <DatePicker
+    //                 className="border border-gray-500 p-2 rounded cursor-pointer"
+    //                 selected={new Date(value)}
+    //                 onChange={onChange}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //       </div>
+    //       <div className="bg-white border-b flex items-center">
+    //         <div className="px-6 py-4 w-1/2 font-medium text-gray-900 whitespace-nowrap">
+    //           Event opening
+    //         </div>
+    //         <div className="px-6 py-4">
+    //           from
+    //           <Controller
+    //             name="date"
+    //             control={control}
+    //             rules={{ required: true, maxLength: 25 }}
+    //             render={({ field: { onChange, value } }) => (
+    //               <DatePicker
+    //                 className="border border-gray-500 p-2 rounded cursor-pointer"
+    //                 selected={new Date(value)}
+    //                 onChange={onChange}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //         <div className="px-6 py-4">
+    //           to{" "}
+    //           <Controller
+    //             name="end_date"
+    //             rules={{ required: true, maxLength: 25 }}
+    //             control={control}
+    //             render={({ field: { onChange, value } }) => (
+    //               <DatePicker
+    //                 className="border border-gray-500 p-2 rounded cursor-pointer"
+    //                 selected={new Date(value)}
+    //                 onChange={onChange}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //       </div>
+    //       <div className="bg-white border-b flex items-center">
+    //         <div className="px-6 py-4 w-1/2 font-medium text-gray-900 whitespace-nowrap">
+    //           Find your spot
+    //         </div>
+    //         <div className="px-6 py-4">
+    //           from
+    //           <Controller
+    //             name="date"
+    //             control={control}
+    //             rules={{ required: true, maxLength: 25 }}
+    //             render={({ field: { onChange, value } }) => (
+    //               <DatePicker
+    //                 className="border border-gray-500 p-2 rounded cursor-pointer"
+    //                 selected={new Date(value)}
+    //                 onChange={onChange}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //         <div className="px-6 py-4">
+    //           to{" "}
+    //           <Controller
+    //             name="end_date"
+    //             rules={{ required: true, maxLength: 25 }}
+    //             control={control}
+    //             render={({ field: { onChange, value } }) => (
+    //               <DatePicker
+    //                 className="border border-gray-500 p-2 rounded cursor-pointer"
+    //                 selected={new Date(value)}
+    //                 onChange={onChange}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //       </div>
+    //       <div className="bg-white border-b flex items-center">
+    //         <div className="px-6 py-4 w-1/2 font-medium text-gray-900 whitespace-nowrap">
+    //           First round of membership sessions
+    //         </div>
+    //         <div className="px-6 py-4">
+    //           from
+    //           <Controller
+    //             name="date"
+    //             control={control}
+    //             rules={{ required: true, maxLength: 25 }}
+    //             render={({ field: { onChange, value } }) => (
+    //               <DatePicker
+    //                 className="border border-gray-500 p-2 rounded cursor-pointer"
+    //                 selected={new Date(value)}
+    //                 onChange={onChange}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //         <div className="px-6 py-4">
+    //           to{" "}
+    //           <Controller
+    //             name="end_date"
+    //             rules={{ required: true, maxLength: 25 }}
+    //             control={control}
+    //             render={({ field: { onChange, value } }) => (
+    //               <DatePicker
+    //                 className="border border-gray-500 p-2 rounded cursor-pointer"
+    //                 selected={new Date(value)}
+    //                 onChange={onChange}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //       </div>
+    //       <div className="bg-white border-b flex items-center">
+    //         <div className="px-6 py-4 w-1/2 font-medium text-gray-900 whitespace-nowrap">
+    //           Second round of membership sessions
+    //         </div>
+    //         <div className="px-6 py-4">
+    //           from
+    //           <Controller
+    //             name="date"
+    //             control={control}
+    //             rules={{ required: true, maxLength: 25 }}
+    //             render={({ field: { onChange, value } }) => (
+    //               <DatePicker
+    //                 className="border border-gray-500 p-2 rounded cursor-pointer"
+    //                 selected={new Date(value)}
+    //                 onChange={onChange}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //         <div className="px-6 py-4">
+    //           to{" "}
+    //           <Controller
+    //             name="end_date"
+    //             rules={{ required: true, maxLength: 25 }}
+    //             control={control}
+    //             render={({ field: { onChange, value } }) => (
+    //               <DatePicker
+    //                 className="border border-gray-500 p-2 rounded cursor-pointer"
+    //                 selected={new Date(value)}
+    //                 onChange={onChange}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //       </div>
+    //     </div>
+    //     <div>
+    //       <h2 className="mb-5 text-2xl mt-5">Day 2</h2>
+    //       <div className="bg-white border-b flex items-center">
+    //         <div className="px-6 py-4 w-1/2 font-medium text-gray-900 whitespace-nowrap">
+    //           Registration
+    //         </div>
+    //         <div className="px-6 py-4">
+    //           from
+    //           <Controller
+    //             name="date"
+    //             control={control}
+    //             rules={{ required: true, maxLength: 25 }}
+    //             render={({ field: { onChange, value } }) => (
+    //               <DatePicker
+    //                 className="border border-gray-500 p-2 rounded cursor-pointer"
+    //                 selected={new Date(value)}
+    //                 onChange={onChange}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //         <div className="px-6 py-4">
+    //           to{" "}
+    //           <Controller
+    //             name="end_date"
+    //             rules={{ required: true, maxLength: 25 }}
+    //             control={control}
+    //             render={({ field: { onChange, value } }) => (
+    //               <DatePicker
+    //                 className="border border-gray-500 p-2 rounded cursor-pointer"
+    //                 selected={new Date(value)}
+    //                 onChange={onChange}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //       </div>
+    //       <div className="bg-white border-b flex items-center">
+    //         <div className="px-6 py-4 w-1/2 font-medium text-gray-900 whitespace-nowrap">
+    //           First round of membership sessions
+    //         </div>
+    //         <div className="px-6 py-4">
+    //           from
+    //           <Controller
+    //             name="date"
+    //             control={control}
+    //             rules={{ required: true, maxLength: 25 }}
+    //             render={({ field: { onChange, value } }) => (
+    //               <DatePicker
+    //                 className="border border-gray-500 p-2 rounded cursor-pointer"
+    //                 selected={new Date(value)}
+    //                 onChange={onChange}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //         <div className="px-6 py-4">
+    //           to{" "}
+    //           <Controller
+    //             name="end_date"
+    //             rules={{ required: true, maxLength: 25 }}
+    //             control={control}
+    //             render={({ field: { onChange, value } }) => (
+    //               <DatePicker
+    //                 className="border border-gray-500 p-2 rounded cursor-pointer"
+    //                 selected={new Date(value)}
+    //                 onChange={onChange}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //       </div>
+    //       <div className="bg-white border-b flex items-center">
+    //         <div className="px-6 py-4 w-1/2 font-medium text-gray-900 whitespace-nowrap">
+    //           Second round of membership sessions
+    //         </div>
+    //         <div className="px-6 py-4">
+    //           from
+    //           <Controller
+    //             name="date"
+    //             control={control}
+    //             rules={{ required: true, maxLength: 25 }}
+    //             render={({ field: { onChange, value } }) => (
+    //               <DatePicker
+    //                 className="border border-gray-500 p-2 rounded cursor-pointer"
+    //                 selected={new Date(value)}
+    //                 onChange={onChange}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //         <div className="px-6 py-4">
+    //           to{" "}
+    //           <Controller
+    //             name="end_date"
+    //             rules={{ required: true, maxLength: 25 }}
+    //             control={control}
+    //             render={({ field: { onChange, value } }) => (
+    //               <DatePicker
+    //                 className="border border-gray-500 p-2 rounded cursor-pointer"
+    //                 selected={new Date(value)}
+    //                 onChange={onChange}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    //   // <div className="flex flex-col gap-8">
+    //   //   <DatePicker
+    //   //     selected={startDate}
+    //   //     onChange={(date) => setStartDate(date)}
+    //   //   />
+    //   //   <div className="mt-5">
+    //   //     <div className="mb-5">
+    //   //       <button
+    //   //         type="button"
+    //   //         className={agenda === "Day1" ? "underline mr-5" : "mr-5"}
+    //   //         onClick={() => setAgenda("Day1")}
+    //   //       >
+    //   //         Day 1
+    //   //       </button>
+    //   //       <button
+    //   //         className={agenda === "Day2" ? "underline" : undefined}
+    //   //         onClick={() => setAgenda("Day2")}
+    //   //         type="button"
+    //   //       >
+    //   //         Day 2
+    //   //       </button>
+    //   //     </div>
+    //   //     {agenda === "Day1" ? (
+    //   //       <input
+    //   //         placeholder="Agenda Day 1"
+    //   //         type="text"
+    //   //         id="agenda_day_one"
+    //   //         {...register("agenda_day_one", { required: true ,maxLength:25 })}
+    //   //         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 h-[350px] mb-5"
+    //   //       />
+    //   //     ) : (
+    //   //       <input
+    //   //         placeholder="Agenda Day 2"
+    //   //         type="text"
+    //   //         id="agenda_day_two"
+    //   //         {...register("agenda_day_two", { required: true ,maxLength:25 })}
+    //   //         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 h-[350px] mb-5"
+    //   //       />
+    //   //     )}
+    //   //   </div>
+    //   // </div>
+    // );
   }
   if (step === STEPS.TEAMS) {
     bodyContent = (
@@ -608,7 +624,7 @@ const CreateEvent = () => {
       //     <p className="px-6 py-4">
       //       to{" "}
       //       <Controller
-      //         name="aplication_deadline"
+      //         name="end_date"
       //         rules={{ required: true ,maxLength:25 }}
       //         control={control}
       //         render={({ field: { onChange, value } }) => (
