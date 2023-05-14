@@ -109,7 +109,7 @@ export default function Home() {
         <div className="flex justify-between items-center py-10 gap-10 w-8/12 mx-auto ">
           <div className="text-[#0AE47C] font-bold text-5xl leading-normal flex flex-col">
             <h1>
-              THE<br></br> LOREM IPSUM<br></br>
+              <br></br> HackMatch<br></br>
               HACKATHON
             </h1>
             <div>

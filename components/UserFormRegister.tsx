@@ -42,7 +42,7 @@ const RegistrationForm = () => {
     try {
       setSubmitting(true);
       setServerError("");
-      const response = await axios.post("/api/registration", {
+      const response = await axios.post("https://mimica-kuzmanovska.sharedwithexpose.com/api/registrations", {
         ...data,
       });
       console.log(response.data);
