@@ -31,12 +31,13 @@ export const LoginForm = () => {
 
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     setSubmitting(true);
+    router.push("/admin-home");
     try {
       const response = await axios.post<LoginFormData>(
         "https://mimica-kuzmanovska.sharedwithexpose.com/",
         data
       );
-      router.push("/admin");
+     
       reset();
     } catch (error: AxiosError | any) {
       setServerError("Invalid email or password");
