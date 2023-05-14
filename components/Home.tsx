@@ -107,7 +107,7 @@ export default function Home() {
           </div>
           <div>
             <Image
-              width={150}
+              width={1000}
               height={150}
               src={HeroImg.src}
               alt={"Hero Banners"}
