@@ -57,7 +57,7 @@ const RegistrationForm = () => {
   useEffect(() => {
     const fetchAcademies = async () => {
       try {
-        const response = await axios.get<any>(
+        const response = await axios.get<Academy[]>(
           "https://mimica-kuzmanovska.sharedwithexpose.com/api/academies"
         );
         setAcademies(response.data);
@@ -74,7 +74,7 @@ const RegistrationForm = () => {
     if (selectedAcademy) {
       const fetchFoodPreferences = async () => {
         try {
-          const response = await axios.get<any>(
+          const response = await axios.get<string[]>(
             `https://mimica-kuzmanovska.sharedwithexpose.com/api/food-preferences`
           );
           setFoodPreferences(response.data);
