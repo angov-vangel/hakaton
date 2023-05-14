@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Image from "next/image";
 import Logo from "../public/img/Frame.png";
@@ -94,11 +94,7 @@ export default function Home() {
                 href="/user-register"
                 className="font-roboto text-lg text-white font-semibold bg-[#0AE47C] py-2 px-7 rounded-lg "
               >
-<<<<<<< Updated upstream
-                Log In
-=======
-              Sign up
->>>>>>> Stashed changes
+                Sign up
               </Link>
             </li>
           </ul>
