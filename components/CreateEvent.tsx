@@ -27,16 +27,17 @@ interface FormValues {
   event_type_id: string;
   academy_id: number | number[] | undefined;
   name: string;
-  start_date: string | Date;
-  event_info: string ;
+  start_date: Date;
+  event_info: string;
   client_info: string;
   max_participants: number;
-  end_date: string | Date;
-  application_deadline: string| Date;
+  end_date: Date;
+  application_deadline: Date;
 }
 
 const CreateEvent = () => {
-  const [startDate, setStartDate] = useState<Date | null | string>(new Date().toISOString().substring(0,10));
+  let bodyContent;
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
   const router = useRouter();
   const [error, setServerError] = useState<AxiosError | any>("");
   const stepsArr = ["Description", "Agenda", "Teams", "Statistics", "Results"];
@@ -61,36 +62,6 @@ const CreateEvent = () => {
     { value: 9, label: "Software testing" },
     { value: 10, label: "Leadirship & Management" },
   ];
-  [
-    {
-      id: 1,
-      event_type_id: 1,
-      academy_id: 7,
-      name: "Hackaton 1",
-      location: "",
-      start_date: "2023-05-14",
-      info: "This is info for Hackaton 1",
-      client_info: "",
-      max_participants: 200,
-      application_deadline: "2023-05-15",
-      created_at: "2023-05-13T15:06:05.000000Z",
-      updated_at: "2023-05-13T15:06:05.000000Z",
-    },
-    {
-      id: 2,
-      event_type_id: 1,
-      academy_id: 5,
-      name: "Hackaton 6 edited",
-      location: "",
-      start_date: "2023-05-14",
-      info: "info for hackaton 5",
-      client_info: "",
-      max_participants: 200,
-      application_deadline: "2023-05-14",
-      created_at: "2023-05-13T15:07:34.000000Z",
-      updated_at: "2023-05-13T16:14:00.000000Z",
-    },
-  ];
   const {
     register,
     handleSubmit,
@@ -105,14 +76,14 @@ const CreateEvent = () => {
       event_type_id: "",
       academy_id: undefined,
       name: "",
-      start_date: new Date().toISOString().substring(0,10),
+      start_date: new Date(),
       event_info: "",
       client_info: "",
       max_participants: 200,
-      end_date: new Date(new Date().getTime() + 24 * 60 * 60 * 1000 * 2).toISOString().substring(0,10),
+      end_date: new Date(new Date().getTime() + 24 * 60 * 60 * 1000 * 2),
       application_deadline: new Date(
         new Date().getTime() + 24 * 60 * 60 * 1000 * 2
-      ).toISOString().substring(0,10),
+      ),
     },
   });
 
@@ -141,136 +112,142 @@ const CreateEvent = () => {
       setSubmitting(false);
     }
   };
-
-  let bodyContent = (
-    <div className="flex flex-col gap-8">
-      <div className="w-full mt-5">
-        <div className="flex gap-4 mb-5 w-full">
-          <div className="grow">
-            <input
-              placeholder="Location"
-              type="text"
-              id="location"
-              {...register("location", { required: true, maxLength: 25 })}
-              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
-            />
-            {errors.location && (
-              <span className="text-red-500">Location is required</span>
-            )}
-          </div>
-          <div className="grow">
-            <select
-              placeholder="Type of event"
-              id="event_type_id"
-              {...register("event_type_id", { required: true, maxLength: 25 })}
-              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
-            >
-              <option value={1}>Live</option>
-              <option value={2}>Online</option>
-            </select>
-            {errors.event_type_id && (
-              <span className="text-red-500">Event type is required</span>
-            )}
-          </div>
-        </div>
-        <div className="mb-5">
-          <div className="flex items-center gap-5">
-            <div className="items-center flex bg-white border border-gray-300 text-sm rounded-lg   font-medium text-gray-900 whitespace-nowrap">
-              <p className="text-gray-400 font-normal pl-2">Submittion</p>
-              <div className="px-3 py-1 relative">
-                from
-                <Controller
-                  name="start_date"
-                  control={control}
-                  rules={{ required: true, maxLength: 25 }}
-                  render={({ field: { onChange, value } }) => (
-                    <DatePicker
-                      className="border border-gray-300 bg-white p-2 rounded cursor-pointer w-[80%]"
-                      selected={new Date(value)}
-                      onChange={onChange}
-                    />
-                  )}
-                />{" "}
-              </div>
-              <div className="px-6 py-1 relative">
-                to
-                <Controller
-                  name="end_date"
-                  control={control}
-                  rules={{ required: true, maxLength: 25 }}
-                  render={({ field: { onChange, value } }) => (
-                    <DatePicker
-                      className="border border-gray-300 bg-white p-2 rounded cursor-pointer w-[80%]"
-                      selected={new Date(value)}
-                      onChange={onChange}
-                    />
-                  )}
-                />{" "}
-              </div>
-            </div>
-            <div className="items-center w-[49.5%] flex bg-white border border-gray-300 text-sm rounded-lg  font-medium text-gray-900 whitespace-nowrap">
-              <p className="text-gray-400 font-normal pl-2">Deadline</p>
-              <div className="px-3 py-1 relative">
-                <Controller
-                  name="application_deadline"
-                  control={control}
-                  rules={{ required: true, maxLength: 25 }}
-                  render={({ field: { onChange, value } }) => (
-                    <DatePicker
-                      className="border border-gray-300 bg-white p-2 rounded cursor-pointer"
-                      selected={new Date(value)}
-                      onChange={onChange}
-                    />
-                  )}
-                />{" "}
-              </div>
-            </div>
-          </div>
-        </div>
-        <Controller
-          name="academy_id"
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <Select
-              isMulti
-              defaultInputValue={undefined}
-              options={options}
-              onChange={(selected) => {
-                onChange(
-                  selected ? selected.map((option) => option.value) : []
-                );
-                handleChange(selected);
-              }}
-              value={options.filter(
-                (option) => Array.isArray(value) && value.includes(option.value)
+  if (step === STEPS.DESCRIPTION) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <div className="w-full mt-5">
+          <div className="flex gap-4 mb-5 w-full">
+            <div className="grow">
+              <input
+                placeholder="Location"
+                type="text"
+                id="location"
+                {...register("location", { required: true, maxLength: 25 })}
+                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
+              />
+              {errors.location && (
+                <span className="text-red-500">Location is required</span>
               )}
-            />
-          )}
-        />
+            </div>
+            <div className="grow">
+              <select
+                placeholder="Type of event"
+                id="event_type_id"
+                {...register("event_type_id", {
+                  required: true,
+                  maxLength: 25,
+                })}
+                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
+              >
+                <option value={1}>Live</option>
+                <option value={2}>Online</option>
+              </select>
+              {errors.event_type_id && (
+                <span className="text-red-500">Event type is required</span>
+              )}
+            </div>
+          </div>
+          <div className="mb-5">
+            <div className="flex items-center gap-5">
+              <div className="items-center flex bg-white border border-gray-300 text-sm rounded-lg   font-medium text-gray-900 whitespace-nowrap">
+                <p className="text-gray-400 font-normal pl-2">Submittion</p>
+                <div className="px-3 py-1 relative">
+                  from
+                  <Controller
+                    name="start_date"
+                    control={control}
+                    rules={{ required: true, maxLength: 25 }}
+                    render={({ field: { onChange, value } }) => (
+                      <DatePicker
+                        className="border border-gray-300 bg-white p-2 rounded cursor-pointer w-[80%]"
+                        selected={new Date(value)}
+                        onChange={onChange}
+                      />
+                    )}
+                  />{" "}
+                </div>
+                <div className="px-6 py-1 relative">
+                  to
+                  <Controller
+                    name="end_date"
+                    control={control}
+                    rules={{ required: true, maxLength: 25 }}
+                    render={({ field: { onChange, value } }) => (
+                      <DatePicker
+                        className="border border-gray-300 bg-white p-2 rounded cursor-pointer w-[80%]"
+                        selected={new Date(value)}
+                        onChange={onChange}
+                      />
+                    )}
+                  />{" "}
+                </div>
+              </div>
+              <div className="items-center w-[49.5%] flex bg-white border border-gray-300 text-sm rounded-lg  font-medium text-gray-900 whitespace-nowrap">
+                <p className="text-gray-400 font-normal pl-2">Deadline</p>
+                <div className="px-3 py-1 relative">
+                  <Controller
+                    name="application_deadline"
+                    control={control}
+                    rules={{ required: true, maxLength: 25 }}
+                    render={({ field: { onChange, value } }) => (
+                      <DatePicker
+                        className="border border-gray-300 bg-white p-2 rounded cursor-pointer"
+                        selected={new Date(value)}
+                        onChange={onChange}
+                      />
+                    )}
+                  />{" "}
+                </div>
+              </div>
+            </div>
+          </div>
+          <Controller
+            name="academy_id"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Select
+                isMulti
+                defaultInputValue={undefined}
+                options={options}
+                onChange={(selected) => {
+                  onChange(
+                    selected ? selected.map((option) => option.value) : []
+                  );
+                  handleChange(selected);
+                }}
+                value={options.filter(
+                  (option) =>
+                    Array.isArray(value) && value.includes(option.value)
+                )}
+              />
+            )}
+          />
 
-        <input
-          placeholder="Event info"
-          type="text"
-          id="event_info"
-          {...register("event_info", { required: true, maxLength: 25 })}
-          className="bg-white border border-gray-300 text-gray-900 text-sm mt-5 rounded-lg h-[250px]  block w-full p-2.5"
-        />
-        {errors.event_info && (
-          <span className="text-red-500">Field is required is required</span>
-        )}
-        <input
-          placeholder="Client info"
-          type="text"
-          id="client_info"
-          {...register("client_info", { required: true, maxLength: 25 })}
-          className="bg-white border border-gray-300 text-gray-900 text-sm mt-5 rounded-lg h-[250px]  block w-full p-2.5"
-        />
-        {errors.client_info && (
-          <span className="text-red-500">Field is required is required</span>
-        )}
+          <input
+            placeholder="Event info"
+            type="text"
+            id="event_info"
+            {...register("event_info", { required: true, maxLength: 25 })}
+            className="bg-white border border-gray-300 text-gray-900 text-sm mt-5 rounded-lg h-[250px]  block w-full p-2.5"
+          />
+          {errors.event_info && (
+            <span className="text-red-500">Field is required is required</span>
+          )}
+          <input
+            placeholder="Client info"
+            type="text"
+            id="client_info"
+            {...register("client_info", { required: true, maxLength: 25 })}
+            className="bg-white border border-gray-300 text-gray-900 text-sm mt-5 rounded-lg h-[250px]  block w-full p-2.5"
+          />
+          {errors.client_info && (
+            <span className="text-red-500">Field is required is required</span>
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
   if (step === STEPS.AGENDA) {
     bodyContent = <Agenda />;
   }
