@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios, { AxiosError } from "axios";
-import BgForm from "../public/img/viber_image_2023-05-14_18-19-04-075.jpg";
+
 interface FormValues {
   name: string;
   email: string;
@@ -28,6 +28,7 @@ const RegistrationForm = () => {
     reset,
     formState: { errors },
   } = useForm<FormValues>();
+
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState("");
   const [academies, setAcademies] = useState<Academy[]>([]);
@@ -42,9 +43,12 @@ const RegistrationForm = () => {
     try {
       setSubmitting(true);
       setServerError("");
-      const response = await axios.post("/api/registration", {
-        ...data,
-      });
+      const response = await axios.post(
+        "https://mimica-kuzmanovska.sharedwithexpose.com/api/register",
+        {
+          ...data,
+        }
+      );
       console.log(response.data);
       reset();
     } catch (error: AxiosError | any) {
@@ -54,6 +58,7 @@ const RegistrationForm = () => {
     }
   };
 
+  // Znachi requestot ne funkcionira ili? pa neznam smeniv polinja nemam pojma
   useEffect(() => {
     const fetchAcademies = async () => {
       try {
@@ -93,6 +98,7 @@ const RegistrationForm = () => {
           className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg  block w-full p-2.5 "
         />
         {errors.name && <span className="text-red-500">Name is required</span>}
+
         <label htmlFor="lastName" className="text-white font-semibold">
           Last Name
         </label>
