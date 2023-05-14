@@ -27,16 +27,16 @@ interface FormValues {
   event_type_id: string;
   academy_id: number | number[] | undefined;
   name: string;
-  start_date: Date;
-  event_info: string;
+  start_date: string | Date;
+  event_info: string ;
   client_info: string;
   max_participants: number;
-  end_date: Date;
-  application_deadline: Date;
+  end_date: string | Date;
+  application_deadline: string| Date;
 }
 
 const CreateEvent = () => {
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [startDate, setStartDate] = useState<Date | null | string>(new Date().toISOString().substring(0,10));
   const router = useRouter();
   const [error, setServerError] = useState<AxiosError | any>("");
   const stepsArr = ["Description", "Agenda", "Teams", "Statistics", "Results"];
@@ -105,14 +105,14 @@ const CreateEvent = () => {
       event_type_id: "",
       academy_id: undefined,
       name: "",
-      start_date: new Date(),
+      start_date: new Date().toISOString().substring(0,10),
       event_info: "",
       client_info: "",
       max_participants: 200,
-      end_date: new Date(new Date().getTime() + 24 * 60 * 60 * 1000 * 2),
+      end_date: new Date(new Date().getTime() + 24 * 60 * 60 * 1000 * 2).toISOString().substring(0,10),
       application_deadline: new Date(
         new Date().getTime() + 24 * 60 * 60 * 1000 * 2
-      ),
+      ).toISOString().substring(0,10),
     },
   });
 
