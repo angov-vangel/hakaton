@@ -225,6 +225,7 @@ const CreateEvent = () => {
           render={({ field: { onChange, value } }) => (
             <Select
               isMulti
+              defaultInputValue={undefined}
               options={options}
               onChange={(selected) => {
                 onChange(
@@ -232,8 +233,8 @@ const CreateEvent = () => {
                 );
                 handleChange(selected);
               }}
-              value={options.filter((option) =>
-                Array.isArray(value) ? value.includes(option.value) : option
+              value={options.filter(
+                (option) => Array.isArray(value) && value.includes(option.value)
               )}
             />
           )}
