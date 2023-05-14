@@ -1,14 +1,13 @@
-"use-client"
-
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios, { AxiosError } from "axios";
-
+import BgForm from "../public/img/viber_image_2023-05-14_18-19-04-075.jpg";
 interface FormValues {
   name: string;
   email: string;
+  lastName: string;
   phone: string;
-  academy: string;
+  academy: string[];
   group: string;
   numberOfMonths: string;
   participation: string;
@@ -33,9 +32,7 @@ const RegistrationForm = () => {
   const [serverError, setServerError] = useState("");
   const [academies, setAcademies] = useState<Academy[]>([]);
   const [selectedAcademy, setSelectedAcademy] = useState<Academy | null>(null);
-  const [options, setOptions] = useState<string[]>([]);
-  const [foodPreferences, setFoodPreferences] = useState<string[]>([]);
-  const [foodAllergies, setFoodAllergies] = useState<string[]>([]);
+  const [options, setOptions] = useState<Academy[]>([]);
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -43,8 +40,6 @@ const RegistrationForm = () => {
       setServerError("");
       const response = await axios.post("/api/registration", {
         ...data,
-        foodPreferences: foodPreferences,
-        foodAllergies: foodAllergies,
       });
       console.log(response.data);
     } catch (error: AxiosError | any) {
@@ -70,133 +65,121 @@ const RegistrationForm = () => {
     fetchAcademies();
   }, []);
 
-  useEffect(() => {
-    if (selectedAcademy) {
-      const fetchFoodPreferences = async () => {
-        try {
-          const response = await axios.get<string[]>(
-            `https://mimica-kuzmanovska.sharedwithexpose.com/api/food-preferences`
-          );
-          setFoodPreferences(response.data);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-
-      fetchFoodPreferences();
-    }
-  }, [selectedAcademy]);
-
   const handleAcademyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const academyId = Number(event.target.value);
     const academy = academies.find((a) => a.id === academyId) || null;
     setSelectedAcademy(academy);
-  };
-
-  const handleFoodPreferenceChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const selectedOptions = Array.from(
-      event.target.selectedOptions,
-      (option) => option.value
-    );
-    setFoodPreferences(selectedOptions);
+    setOptions([]); // clear the options state when academy is changed
   };
 
   return (
-    <div className="py-8">
+    <div className="py-8 bg-img">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col space-y-4 md:w-4/12 w-11/12 mx-auto"
+        className="flex flex-col space-y-4  md:w-6/12 w-11/12 mx-auto element p-20 rounded-lg shadow-lg"
       >
-        <label htmlFor="name">Name</label>
+        <label className="text-black font-semibold" htmlFor="name">
+          First Name
+        </label>
         <input
           type="text"
           id="name"
           {...register("name", { required: true })}
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+          className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg  block w-full p-2.5 "
         />
         {errors.name && <span className="text-red-500">Name is required</span>}
-        <label htmlFor="email">Email</label>
+        <label htmlFor="lastName" className="text-black font-semibold">
+          last Name
+        </label>
         <input
-          type="email"
-          id="email"
-          {...register("email", { required: true })}
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+          type="lastName"
+          id="lastName"
+          {...register("lastName", { required: true })}
+          className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg  block w-full p-2.5 "
         />
         {errors.email && (
           <span className="text-red-500">Email is required</span>
         )}
-        <label htmlFor="phone">Phone</label>
+
+        <label htmlFor="email" className="text-black font-semibold">
+          Email
+        </label>
+        <input
+          type="email"
+          id="email"
+          {...register("email", { required: true })}
+          className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg  block w-full p-2.5 "
+        />
+        {errors.email && (
+          <span className="text-red-500">Email is required</span>
+        )}
+        <label htmlFor="phone" className="text-black font-semibold">
+          Phone
+        </label>
         <input
           type="tel"
           id="phone"
           {...register("phone", { required: true })}
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+          className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg  block w-full p-2.5 "
         />
         {errors.phone && (
           <span className="text-red-500">Phone is required</span>
         )}
-        <label htmlFor="academy">Select Academy:</label>
+        <label htmlFor="academy" className="text-black font-semibold">
+          Select Academy:
+        </label>
         <select
           id="academy"
-          name="academy"
+          {...register("academy", { required: true })}
           onChange={handleAcademyChange}
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5  "
         >
+          <option value="">Select an academy</option>
           {academies.map((academy) => (
             <option key={academy.id} value={academy.id}>
               {academy.name}
             </option>
           ))}
         </select>
-
-        {selectedAcademy && (
-          <div>
-            <label htmlFor="options">Select Options:</label>
-            <select
-              id="options"
-              name="options"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-            >
-              {options.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </div>
+        {errors.academy && (
+          <span className="text-red-500">Academy is required</span>
         )}
+
         <div className="flex flex-col space-y-2">
-          <label htmlFor="numberOfMonths">
+          <label htmlFor="group" className="text-black font-semibold">
+            Group
+          </label>
+          <input
+            type="text"
+            id="group"
+            {...register("group", { required: true })}
+            className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg  block w-full p-2.5 "
+          />
+        </div>
+        <div className="flex flex-col space-y-2">
+          <label htmlFor="numberOfMonths " className="text-black font-semibold">
             Number of months that you are involved in the academy
           </label>
           <input
             type="text"
             id="numberOfMonths"
             {...register("numberOfMonths", { required: true })}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+            className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg  block w-full p-2.5 "
           />
         </div>
         <div className="flex flex-col space-y-4  ">
-          <label
-            htmlFor="participation"
-            className="text-gray-700 dark:text-white"
-          >
+          <label htmlFor="participation" className="text-black font-semibold ">
             I will participate
           </label>
-          <div className="flex justify-between w-8/12 mx-auto">
+          <div className="flex w-8/12 mx-auto gap-4">
             <div className="relative inline-flex items-center">
               <input
                 type="checkbox"
                 id="participation"
                 {...register("participation")}
-                className="form-checkbox h-5 w-5 text-gray-600 dark:text-gray-400 transition duration-150 ease-in-out accent-white"
+                className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg  block w-full p-2.5 "
               />
-              <label
-                htmlFor="participation_live"
-                className="ml-2 text-gray-700 dark:text-white"
-              >
+              <label htmlFor="participation_live" className="ml-2 text-black">
                 Live
               </label>
             </div>
@@ -205,53 +188,48 @@ const RegistrationForm = () => {
                 type="checkbox"
                 id="participation"
                 {...register("participation")}
-                className="form-checkbox h-5 w-5 text-gray-600 dark:text-gray-400 transition duration-150 ease-in-out accent-white"
+                className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg  block w-full p-2.5 "
               />
-              <label
-                htmlFor="participation_online"
-                className="ml-2 text-gray-700 dark:text-white"
-              >
+              <label htmlFor="participation_online" className="ml-2 text-black">
                 Online
               </label>
             </div>
           </div>
         </div>
         <div className="flex flex-col space-y-2">
-          <label htmlFor="foodPreferences">Food preferences</label>
-          <select
+          <label htmlFor="foodPreferences" className="text-black font-semibold">
+            Food preferences
+          </label>
+          <input
+            type="text"
             id="foodPreferences"
-            onChange={handleFoodPreferenceChange}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-          >
-            {foodPreferences.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+            {...register("foodAllergies")}
+            className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg  block w-full p-2.5 "
+          />
         </div>
 
         <div className="flex flex-col space-y-2">
-          <label htmlFor="foodAllergies">Food allergies</label>
+          <label htmlFor="foodAllergies" className="text-black font-semibold">
+            Food allergies
+          </label>
           <input
             type="text"
             id="foodAllergies"
             {...register("foodAllergies")}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+            className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg  block w-full p-2.5 "
           />
         </div>
 
         <div className="relative inline-flex items-center justify-center">
           <input
             type="checkbox"
-            checked
             id="participation"
             {...register("participation")}
-            className="form-checkbox h-5 w-5 text-gray-600 dark:text-gray-400 transition duration-150 ease-in-out accent-white"
+            className="form-checkbox h-5 w-5 text-gray-600  transition duration-150 ease-in-out accent-white"
           />
           <label
             htmlFor="participation_online"
-            className="ml-2 text-gray-700 dark:text-white"
+            className="ml-2 text-black font-semibold "
           >
             I accept the terms and conditions
           </label>
@@ -260,7 +238,7 @@ const RegistrationForm = () => {
         <button
           type="submit"
           disabled={submitting}
-          className="bg-white hover:bg-gray-100 text-text-gray-700 px-4 py-2 rounded-lg disabled:bg-gray-400 border-gray-400 border-2 "
+          className="bg-[#0AE47C]  w-2/6 text-text-gray-700 px-4 py-2 rounded-lg disabled:bg-gray-400 text-white font-semibold mx-auto "
         >
           {submitting ? "Submitting..." : "Submit"}
         </button>
