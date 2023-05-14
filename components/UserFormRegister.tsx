@@ -35,6 +35,10 @@ const RegistrationForm = () => {
   const [options, setOptions] = useState<Academy[]>([]);
 
   const onSubmit = async (data: FormValues) => {
+    if (Object.keys(errors).length > 0) {
+      return;
+    }
+
     try {
       setSubmitting(true);
       setServerError("");
@@ -42,6 +46,7 @@ const RegistrationForm = () => {
         ...data,
       });
       console.log(response.data);
+      reset();
     } catch (error: AxiosError | any) {
       setServerError(error.message);
     } finally {
@@ -69,7 +74,7 @@ const RegistrationForm = () => {
     const academyId = Number(event.target.value);
     const academy = academies.find((a) => a.id === academyId) || null;
     setSelectedAcademy(academy);
-    setOptions([]); // clear the options state when academy is changed
+    setOptions([]);
   };
 
   return (
@@ -89,7 +94,7 @@ const RegistrationForm = () => {
         />
         {errors.name && <span className="text-red-500">Name is required</span>}
         <label htmlFor="lastName" className="text-black font-semibold">
-          last Name
+          Last Name
         </label>
         <input
           type="lastName"
