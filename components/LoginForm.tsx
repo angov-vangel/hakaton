@@ -1,6 +1,7 @@
 "use client";
 
 import axios, { AxiosError } from "axios";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -13,6 +14,7 @@ interface LoginResponseData {
   token: string;
 }
 export const LoginForm = () => {
+  const router = useRouter();
   const [error, setServerError] = useState("");
   const [submiting, setSubmitting] = useState(false);
   const {
@@ -34,18 +36,7 @@ export const LoginForm = () => {
         "https://mimica-kuzmanovska.sharedwithexpose.com/",
         data
       );
-      const token = response.data.token;
-      localStorage.setItem("token", token); // Store the token in local storage
-      // You can use the token to authenticate future requests to the server
-      const authenticatedResponse = await axios.get(
-        "https://mimica-kuzmanovska.sharedwithexpose.com/protected",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(authenticatedResponse.data);
+      router.push("/admin");
       reset();
     } catch (error: AxiosError | any) {
       setServerError("Invalid email or password");
