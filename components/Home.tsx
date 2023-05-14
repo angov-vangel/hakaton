@@ -16,8 +16,8 @@ export default function Home() {
         <Image
           src={Logo.src}
           alt={"Logo"}
-          width={150}
-          height={150}
+          width={75}
+          height={75}
           className="ml-auto mt-7"
         />
 
@@ -80,19 +80,7 @@ export default function Home() {
                     : ""
                 }`}
               >
-                Faq
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/meetyourteam"
-                className={`font-roboto text-lg ${
-                  asPath === "/faq"
-                    ? "font-bold text-[#0AE47C] border-b-4 border-[#8A8787]"
-                    : ""
-                }`}
-              >
-                Meet your team
+                FAQ
               </Link>
             </li>
             <li className="mb-5">
@@ -100,7 +88,7 @@ export default function Home() {
                 href="/login"
                 className="font-roboto text-lg text-white font-semibold bg-[#0AE47C] py-2 px-7 rounded-lg "
               >
-               Login
+                Log in
               </Link>
             </li>
           </ul>
@@ -109,8 +97,7 @@ export default function Home() {
         <div className="flex justify-between items-center py-10 gap-10 w-8/12 mx-auto ">
           <div className="text-[#0AE47C] font-bold text-5xl leading-normal flex flex-col">
             <h1>
-              THE<br></br> LOREM IPSUM<br></br>
-              HACKATHON
+              <br></br> HackMatch<br></br>
             </h1>
             <div>
               <button className="bg-white text-[#0AE47C] py-1 px-2 rounded-lg mt-5 text-lg border-[#0AE47C] border-2">
