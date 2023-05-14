@@ -59,8 +59,8 @@ export const Agenda = () => {
               <select
                 className="border-2 border-gray-900 rounded mr-5"
                 id="hour-select"
-                value={selectedHour}
-                onChange={(e) => setSelectedHour(e.target.value)}
+                value={selectedHour5}
+                onChange={(e) => setSelectedHour5(e.target.value)}
               >
                 <option value="">from</option>
                 {hours.map((hour) => (
@@ -199,8 +199,8 @@ export const Agenda = () => {
               <select
                 className="border-2 border-gray-900 rounded"
                 id="hour-select"
-                value={selectedHour2}
-                onChange={(e) => setSelectedHour2(e.target.value)}
+                value={selectedHour4}
+                onChange={(e) => setSelectedHour4(e.target.value)}
               >
                 <option value="">to</option>
                 {hours.map((hour) => (
@@ -217,8 +217,8 @@ export const Agenda = () => {
               <select
                 className="border-2 border-gray-900 rounded mr-5"
                 id="hour-select"
-                value={selectedHour}
-                onChange={(e) => setSelectedHour(e.target.value)}
+                value={selectedHour5}
+                onChange={(e) => setSelectedHour5(e.target.value)}
               >
                 <option value="">from</option>
                 {hours.map((hour) => (
@@ -230,8 +230,8 @@ export const Agenda = () => {
               <select
                 className="border-2 border-gray-900 rounded"
                 id="hour-select"
-                value={selectedHour2}
-                onChange={(e) => setSelectedHour2(e.target.value)}
+                value={selectedHour5}
+                onChange={(e) => setSelectedHour5(e.target.value)}
               >
                 <option value="">to</option>
                 {hours.map((hour) => (
